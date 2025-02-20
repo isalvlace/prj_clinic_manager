@@ -1,0 +1,383 @@
+/* Tela Login */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    position: relative;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.user-info h4 {
+    color: #5da7ec;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 150;
+}
+
+header {
+    border: 1px solid purple;
+    margin-right: 80px;
+}
+
+header p, header a {
+    color: #06294b;
+    font-size: 17px;
+    margin-bottom: 10px;
+    font-weight: 150;
+}
+
+.label-login-container {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 16px;
+    text-align: left;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #00b0ff;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 25px;
+        width: 90%;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    button[type="submit"] {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+/* Container flexível para menu + tabela */
+.wrapper {
+    display: flex;
+    transition: margin-right 0.3s ease;  
+    flex-grow: 1;
+    justify-content: flex-start;  
+    width: 100%; 
+}
+
+/* Menu lateral */
+.menu {
+    width: 250px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.menu ul {
+    list-style: none;
+    margin-top: 50px;
+    padding: 0;
+}
+
+.menu ul li {
+    width: 100%;
+}
+
+.menu ul li a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 15px;
+    width: 100%;
+    color: #011a41;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    gap: 10px;
+}
+
+.menu ul li a i {
+    font-size: 18px;
+}
+
+.menu ul li a:hover {
+    background: #3684a8;
+    color: #fff;
+} 
+
+/* Botão de toggle do menu */
+.menu-toggle {
+    position: absolute;
+    top: 20px;
+    right: -50px;
+    width: 40px;
+    height: 40px;
+    background: #99bdf7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu-toggle:hover {
+    background: #82a4e6;
+}
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #3264ee;
+    margin: 4px 0;
+    border-radius: 50px;
+    transition: 0.3s ease;
+    position: absolute;
+} 
+
+.menu-toggle span:nth-child(1) {
+    transform: translateY(-8px);
+}
+
+.menu-toggle span:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.menu-toggle span:nth-child(3) {
+    transform: translateY(8px);
+}
+
+#menu-checkbox {
+    display: none;
+}
+
+#menu-checkbox:checked ~ .menu {
+    left: -250px;
+}
+
+#menu-checkbox:checked ~ .wrapper .main-content {
+    margin-left: 0;
+    width: 100%;
+}
+
+#menu-checkbox:checked ~ .menu .menu-toggle span:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+#menu-checkbox:checked ~ .menu .menu-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+#menu-checkbox:checked ~ .menu .menu-toggle span:nth-child(3) {
+    transform: rotate(-45deg);
+} 
+
+/* Conteúdo principal (TABELA) */
+.main-content {
+    flex-grow: 1;
+    margin-left: 250px; 
+    padding: 20px;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width: calc(100% - 250px); 
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.lista-arquivos {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Tabela */
+#tabela-arquivos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#tabela-arquivos thead {
+    background-color: #3684a8;
+    color: white;
+}
+
+#tabela-arquivos th {
+    padding: 12px;
+    text-align: center;
+}
+
+#tabela-arquivos td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+#tabela-arquivos tbody tr:hover {
+    background-color: rgb(130, 151, 160) !important;
+    color: white;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#tabela-arquivos tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+#tabela-arquivos tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+#tabela-arquivos tbody tr td:nth-child(1) {
+    cursor: pointer;
+}
+
+/* Área de arquivo (UPLOAD) */
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.upload-box {
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed #3684a8;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 16px;
+    color: #3684a8;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    min-height: 60px;
+    box-sizing: border-box;
+}
+
+.upload-box:hover {
+    background-color: #f0f0f0;
+}
+
+.upload-box i {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.file-input {
+    display: none;
+} 
+
+/* Botões de ação */
+.button-container {
+    display: flex;
+    justify-content: center; 
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.button-container button {
+    flex: 1;
+    max-width: 120px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.upload-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #f7594d;
+    color: white;
+}
+
+.button-container button:hover {
+    transform: scale(1.05);
+}
+
+ 
+ 
