@@ -1,30 +1,33 @@
 <?php
 session_start();
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/router.php';
+require_once __DIR__ . '/controllers/LoginController.php';
+require_once __DIR__ . '/controllers/HomeController.php';
+require_once __DIR__ . '/controllers/SairController.php';
 
-$database = new Database();
-$pdo = $database->getConnection();
+$pdo = (new Database())->getConnection();
+$router = new Router();
 
-$page = isset($_GET['page']) ? $_GET['page'] : 'login';
+$router->addRoute('GET', '/', 'LoginController', 'login');
+$router->addRoute('GET', '/login', 'LoginController', 'login');
+$router->addRoute('POST', '/login', 'LoginController', 'login');
+$router->addRoute('GET', '/home', 'HomeController', 'index');
+$router->addRoute('GET', '/sair', 'SairController', 'logout');
 
-$routes = [
-    'login' => 'views/login.php',
-    'autenticar' => 'controllers/LoginController.php',
-    'home' => 'views/home.php',
-    'sair' => 'controllers/SairController.php'
-];
+$basePath = '/prj_clinic_manager';
+$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestUri = str_replace($basePath, '', $requestUri);
+$requestMethod = $_SERVER['REQUEST_METHOD'];
 
-// Verifica se a página solicitada existe nas rotas
-if (array_key_exists($page, $routes)) {
-    // Se for uma página de login, trata o login antes de carregar a view
-    if ($page === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        require_once 'controllers/LoginController.php';
-        $loginController = new LoginController($pdo); 
-        $loginController->login();
-        exit;
-    } else {
-        require_once __DIR__ . '/' . $routes[$page];
-    }
-} else {
-    echo "Erro 404: Página não encontrada.";
+if (!isset($_SESSION['usuario_id']) && !in_array($requestUri, ['/login', '/'])) {
+    header("Location: {$basePath}/login");
+    exit();
 }
+
+$router->dispatch($requestUri, $requestMethod, $pdo);

@@ -40,7 +40,5 @@
                 </div>
             </div>
         </div>
-
-        <?php include('table.php'); ?>
     </div> <!-- Fim do container-fluid -->
 </main> <!-- Fim do content -->

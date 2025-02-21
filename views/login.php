@@ -9,7 +9,7 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="index.php" method="POST">
+        <form action="/prj_clinic_manager/login" method="POST">
             <div>
                 <label class="label-login-container" for="email">E-mail</label>
                 <input type="email" name="email" id="email" required>

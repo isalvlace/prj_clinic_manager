@@ -3,9 +3,6 @@
                 <div class="row text-muted"> <!-- Início do row -->
                     <div class="col-6 text-start"> <!-- Início do col -->
                         <p class="mb-0">
-                            <a href="#" class="text-muted">
-                                <strong>CodzSwod</strong>
-                            </a>
                         </p>
                     </div> <!-- Fim do col -->
                     <div class="col-6 text-end">

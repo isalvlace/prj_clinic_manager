@@ -1,5 +1,9 @@
 <?php
-session_start();
-session_destroy();
-header("Location: index.php?page=login");
-exit;
+class SairController {
+    public function logout() {
+        session_start();
+        session_destroy();
+        header('Location: /login');
+        exit();
+    }
+}
