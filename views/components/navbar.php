@@ -12,7 +12,8 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a href="#" class="dropdown-item">Perfil</a>
                         <a href="#" class="dropdown-item">Configurações</a>
-                        <a href="index.php?page=sair" class="dropdown-item">Sair</a>
+                        <!-- <a href="index.php?page=sair" class="dropdown-item">Sair</a> -->
+                        <a href="sair" class="dropdown-item">Sair</a>
                     </div>
                 </li>
             </ul>

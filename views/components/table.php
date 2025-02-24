@@ -1,9 +1,21 @@
-<div class="card border-0"> <!-- Início do card -->
+<div class="upload-container">
+    <label for="file-upload" class="upload-box">
+        <span id="upload-text">Clique ou arraste o arquivo</span>
+    </label>
+    <input type="file" id="file-upload" class="file-input" />
+    <div class="button-container">
+        <button id="cancel-button" class="cancel-btn">Cancelar</button>
+        <button id="upload-button" class="upload-btn" disabled>Subir</button>  
+    </div>
+</div>
+
+
+<div class="card border-0">  
     <div class="card-header">
         <h5 class="card-title">Exames</h5>
     </div>
-    <div class="card-body"> <!-- Início do card-body -->
-        <table id="tabela-arquivos" class="display"> <!-- Início da tabela -->
+    <div class="card-body">  
+        <table id="tabela-arquivos" class="display">  
             <thead>
                 <tr>
                     <th>Índice</th>
@@ -26,7 +38,7 @@
                     <td>João</td>
                 </tr>
             </tbody>
-        </table> <!-- Fim da tabela -->
-    </div> <!-- Fim do card-body -->
-</div> <!-- Fim do card -->
+        </table>  
+    </div>  
+</div>  
    

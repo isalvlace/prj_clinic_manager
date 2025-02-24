@@ -44,7 +44,56 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function funcionalidadesCarregamento() {
+        const fileInput = document.getElementById("file-upload");
+        const uploadBox = document.querySelector(".upload-box");
+        const uploadText = document.getElementById("upload-text");
+        const uploadButton = document.getElementById("upload-button");
+        const cancelButton = document.getElementById("cancel-button");
+    
+        fileInput.addEventListener("change", function () {
+            if (fileInput.files.length > 0) {
+                uploadText.textContent = fileInput.files[0].name;  
+                uploadButton.disabled = false;  
+                uploadBox.classList.add("file-selected");  
+            } else {
+                resetUploadBox();
+            }
+        });
+    
+        uploadBox.addEventListener("dragover", function (e) {
+            e.preventDefault();
+            uploadBox.style.backgroundColor = "#8ec1f0";  
+        });
+    
+        uploadBox.addEventListener("dragleave", function () {
+            uploadBox.style.backgroundColor = "";  
+        });
+    
+        uploadBox.addEventListener("drop", function (e) {
+            e.preventDefault();
+            fileInput.files = e.dataTransfer.files;   
+            uploadText.textContent = fileInput.files[0].name;  
+            uploadButton.disabled = false; 
+            uploadBox.classList.add("file-selected");  
+        });
+    
+        cancelButton.addEventListener("click", function () {
+            resetUploadBox();
+        });
+    
+        function resetUploadBox() {
+            fileInput.value = "";  
+            uploadText.textContent = "Clique ou arraste o arquivo";  
+            uploadButton.disabled = true; 
+            uploadBox.classList.remove("file-selected");  
+            uploadBox.style.backgroundColor = "";  
+        }
+    } 
+    
     aplicarTemaInicial();
     inicializarAlternanciaTema();
     inicializarToggleSidebar();
+    funcionalidadesCarregamento();
 });
+
