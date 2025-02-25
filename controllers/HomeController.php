@@ -15,11 +15,13 @@ class HomeController {
         include_once __DIR__ . "/../views/components/navbar.php";
         
         $page = $_GET['page'] ?? 'home';
-        
+
         $pageFile = __DIR__ . "/../views/components/{$page}.php";
 
-        if (file_exists($pageFile)) {
+        if (file_exists($pageFile) && $page == 'table') {
             $this->arquivoController->listarArquivos();
+            include_once $pageFile;
+        } else if (file_exists($pageFile) && $page == 'dashboard') {
             include_once $pageFile;
         } else {
             echo "Página não encontrada!";
