@@ -18,25 +18,21 @@
         <table id="tabela-arquivos" class="display">  
             <thead>
                 <tr>
-                    <th>Índice</th>
-                    <th>Arquivo</th>
+                    <th>Id</th>
+                    <th>Nome</th>
                     <th>Caminho</th>
-                    <th>Vinculado</th>
+                    <th>Data</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Arquivo_01.pdf</td>
-                    <td>/home/ispc/Download</td>
-                    <td>Juliana</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Arquivo_02.pdf</td>
-                    <td>/home/ispc/Download</td>
-                    <td>João</td>
-                </tr>
+                <?php foreach ($arquivos as $indice => $arquivo): ?>
+                    <tr>
+                        <td><?= $indice + 1 ?></td>
+                        <td><?= htmlspecialchars($arquivo['nome_arquivo']) ?></td>
+                        <td><?= htmlspecialchars($arquivo['caminho']) ?></td>
+                        <td><?= htmlspecialchars($arquivo['criado_em']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>  
     </div>  

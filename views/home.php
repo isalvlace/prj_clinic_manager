@@ -11,6 +11,6 @@ ini_set('display_errors', 1);
 
 require_once __DIR__ . "/../controllers/HomeController.php";
 
-$homeController = new HomeController();
+$homeController = new HomeController($pdo);
 $homeController->index();
 ?>
