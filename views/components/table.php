@@ -1,14 +1,15 @@
-<div class="upload-container">
-    <label for="file-upload" class="upload-box">
-        <span id="upload-text">Clique ou arraste o arquivo</span>
-    </label>
-    <input type="file" id="file-upload" class="file-input" />
-    <div class="button-container">
-        <button id="cancel-button" class="cancel-btn">Cancelar</button>
-        <button id="upload-button" class="upload-btn" disabled>Subir</button>  
+<form id="upload-form" action="/prj_clinic_manager/salvar-arquivo" method="POST" enctype="multipart/form-data">
+    <div class="upload-container">
+        <label for="file-upload" class="upload-box">
+            <span id="upload-text">Clique ou arraste o arquivo</span>
+        </label>
+        <input type="file" id="file-upload" name="arquivo" class="file-input" />
+        <div class="button-container">
+            <button id="cancel-button" class="cancel-btn" type="button">Cancelar</button>
+            <button id="upload-button" class="upload-btn" type="button" disabled>Subir</button>
+        </div>
     </div>
-</div>
-
+</form>
 
 <div class="card border-0">  
     <div class="card-header">

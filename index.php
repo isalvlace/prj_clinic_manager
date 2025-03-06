@@ -19,6 +19,8 @@ $router->addRoute('GET', '/login', 'LoginController', 'login');
 $router->addRoute('POST', '/login', 'LoginController', 'login');
 $router->addRoute('GET', '/home', 'HomeController', 'index');
 $router->addRoute('GET', '/sair', 'SairController', 'logout');
+$router->addRoute('POST', '/salvar-arquivo', 'ArquivoController', 'salvarArquivo');
+
 
 $basePath = '/prj_clinic_manager';
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

@@ -50,37 +50,49 @@ document.addEventListener("DOMContentLoaded", function () {
         const uploadText = document.getElementById("upload-text");
         const uploadButton = document.getElementById("upload-button");
         const cancelButton = document.getElementById("cancel-button");
+
+        if (uploadButton) {
+            uploadButton.addEventListener("click", function (event) {
+                enviarArquivo(event); 
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener("change", function () {
+                if (fileInput.files.length > 0) {
+                    uploadText.textContent = fileInput.files[0].name;  
+                    uploadButton.disabled = false;  
+                    uploadBox.classList.add("file-selected");  
+                } else {
+                    resetUploadBox();
+                }
+            });
+        }
     
-        fileInput.addEventListener("change", function () {
-            if (fileInput.files.length > 0) {
+        if (uploadBox) {
+            uploadBox.addEventListener("dragover", function (e) {
+                e.preventDefault();
+                uploadBox.style.backgroundColor = "#8ec1f0";  
+            });
+    
+            uploadBox.addEventListener("dragleave", function () {
+                uploadBox.style.backgroundColor = "";  
+            });
+    
+            uploadBox.addEventListener("drop", function (e) {
+                e.preventDefault();
+                fileInput.files = e.dataTransfer.files;   
                 uploadText.textContent = fileInput.files[0].name;  
-                uploadButton.disabled = false;  
+                uploadButton.disabled = false; 
                 uploadBox.classList.add("file-selected");  
-            } else {
+            });
+        }
+    
+        if (cancelButton) {
+            cancelButton.addEventListener("click", function () {
                 resetUploadBox();
-            }
-        });
-    
-        uploadBox.addEventListener("dragover", function (e) {
-            e.preventDefault();
-            uploadBox.style.backgroundColor = "#8ec1f0";  
-        });
-    
-        uploadBox.addEventListener("dragleave", function () {
-            uploadBox.style.backgroundColor = "";  
-        });
-    
-        uploadBox.addEventListener("drop", function (e) {
-            e.preventDefault();
-            fileInput.files = e.dataTransfer.files;   
-            uploadText.textContent = fileInput.files[0].name;  
-            uploadButton.disabled = false; 
-            uploadBox.classList.add("file-selected");  
-        });
-    
-        cancelButton.addEventListener("click", function () {
-            resetUploadBox();
-        });
+            });
+        }
     
         function resetUploadBox() {
             fileInput.value = "";  
@@ -91,9 +103,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     } 
     
+    function enviarArquivo(event) {
+        event.preventDefault(); 
+
+        const form = document.getElementById("upload-form");
+        if (!form) {
+            alert("Formulário não encontrado.");
+            return;
+        }
+    
+        const formData = new FormData(form);
+    
+        fetch(form.action, {
+            method: form.method,  
+            body: formData,  
+            headers: {
+                'Accept': 'application/json' 
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro de resposta do servidor');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "success") {
+                window.location.reload(); 
+            } else {
+                alert("Erro ao salvar arquivo: " + data.message);
+            }
+        })
+        .catch(error => {
+            alert("Erro de conexão ou outro problema: " + error);
+        });
+    }
+
     aplicarTemaInicial();
     inicializarAlternanciaTema();
     inicializarToggleSidebar();
     funcionalidadesCarregamento();
 });
-
