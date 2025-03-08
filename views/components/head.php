@@ -10,10 +10,11 @@
     <link rel="stylesheet" href="/prj_clinic_manager/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/prj_clinic_manager/assets/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="/prj_clinic_manager/assets/css/style.css">
+    <link rel="stylesheet" href="/prj_clinic_manager/assets/css/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Ícones -->
     <script src="https://kit.fontawesome.com/ae360af17e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>

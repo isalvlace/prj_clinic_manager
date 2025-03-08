@@ -102,43 +102,122 @@ document.addEventListener("DOMContentLoaded", function () {
             uploadBox.style.backgroundColor = "";  
         }
     } 
-    
-    function enviarArquivo(event) {
-        event.preventDefault(); 
 
+    /*
+    async function enviarArquivo(event) {
+        event.preventDefault(); 
+    
         const form = document.getElementById("upload-form");
+        const botaoEnviar = document.getElementById("upload-button");
+    
         if (!form) {
-            alert("Formulário não encontrado.");
+            toastr.error("Formulário não encontrado.");
+            return;
+        }
+    
+        if (!botaoEnviar) {
+            toastr.error("Botão de envio não encontrado.");
             return;
         }
     
         const formData = new FormData(form);
     
-        fetch(form.action, {
-            method: form.method,  
-            body: formData,  
-            headers: {
-                'Accept': 'application/json' 
-            }
-        })
-        .then(response => {
+        botaoEnviar.disabled = true;
+        botaoEnviar.innerHTML = 'Enviando...';
+    
+        toastr.info("Processando upload, aguarde...", "Enviando", { timeOut: 5000 });
+    
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+    
             if (!response.ok) {
-                throw new Error('Erro de resposta do servidor');
+                throw new Error(`Erro HTTP: ${response.status}`);
             }
-            return response.json();
-        })
-        .then(data => {
+    
+            const data = await response.json();
+    
             if (data.status === "success") {
-                window.location.reload(); 
+                setTimeout(() => {
+                    toastr.success("Arquivo enviado com sucesso!");
+                    location.reload();  
+                }, 3000); 
             } else {
-                alert("Erro ao salvar arquivo: " + data.message);
+                throw new Error(data.message || "Erro desconhecido no servidor.");
             }
-        })
-        .catch(error => {
-            alert("Erro de conexão ou outro problema: " + error);
-        });
+        } catch (error) {
+            toastr.error("Erro: " + error.message);
+        } finally {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerHTML = 'Subir';
+        }
     }
+    */
 
+    async function enviarArquivo(event) {
+        event.preventDefault(); 
+    
+        const form = document.getElementById("upload-form");
+        const botaoEnviar = document.getElementById("upload-button");
+    
+        if (!form) {
+            toastr.error("Formulário não encontrado.");
+            return;
+        }
+    
+        if (!botaoEnviar) {
+            toastr.error("Botão de envio não encontrado.");
+            return;
+        }
+    
+        const formData = new FormData(form);
+    
+        botaoEnviar.disabled = true;
+        botaoEnviar.innerHTML = 'Enviando...';
+    
+        toastr.info("Processando upload, aguarde...", "Enviando", { timeOut: 5000 });
+    
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+    
+            const data = await response.json();
+    
+            if (data.status === "success") {
+                localStorage.setItem("uploadSuccess", "true");
+    
+                setTimeout(() => {
+                    location.reload();
+                }, 3000); 
+            } else {
+                throw new Error(data.message || "Erro desconhecido no servidor.");
+            }
+        } catch (error) {
+            toastr.error("Erro: " + error.message);
+        } finally {
+            botaoEnviar.disabled = false;
+            botaoEnviar.innerHTML = 'Subir';
+        }
+    }
+    
+    // para o caso onde o upload funcionou
+    window.onload = () => {
+        if (localStorage.getItem("uploadSuccess") === "true") {
+            toastr.success("Arquivo enviado com sucesso!");
+            localStorage.removeItem("uploadSuccess");
+        }
+    };
+      
     aplicarTemaInicial();
     inicializarAlternanciaTema();
     inicializarToggleSidebar();

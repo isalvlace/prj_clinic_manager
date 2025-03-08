@@ -42,7 +42,7 @@ class ArquivoController {
     
         $ftpHost = '127.0.0.1';
         $ftpUser = 'ftpuser';
-        $ftpPass = 'senha_do_seu_usuario';
+        $ftpPass = 'lickitup';
     
         $ftpConn = ftp_connect($ftpHost);
         if (!$ftpConn) {
