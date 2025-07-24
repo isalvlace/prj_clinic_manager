@@ -103,7 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     } 
 
-    /*
     async function enviarArquivo(event) {
         event.preventDefault(); 
     
@@ -155,62 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
             botaoEnviar.innerHTML = 'Subir';
         }
     }
-    */
- 
-    // async function enviarArquivo(event) {
-    //     event.preventDefault(); 
     
-    //     const form = document.getElementById("upload-form");
-    //     const botaoEnviar = document.getElementById("upload-button");
-    
-    //     if (!form) {
-    //         toastr.error("Formulário não encontrado.");
-    //         return;
-    //     }
-    
-    //     if (!botaoEnviar) {
-    //         toastr.error("Botão de envio não encontrado.");
-    //         return;
-    //     }
-    
-    //     const formData = new FormData(form);
-    
-    //     botaoEnviar.disabled = true;
-    //     botaoEnviar.innerHTML = 'Enviando...';
-    
-    //     toastr.info("Processando upload, aguarde...", "Enviando", { timeOut: 5000 });
-    
-    //     try {
-    //         const response = await fetch(form.action, {
-    //             method: form.method,
-    //             body: formData,
-    //             headers: { 'Accept': 'application/json' }
-    //         });
-    
-    //         if (!response.ok) {
-    //             throw new Error(`Erro HTTP: ${response.status}`);
-    //         }
-    
-    //         const data = await response.json();
-    
-    //         if (data.status === "success") {
-    //             localStorage.setItem("uploadSuccess", "true");
-    
-    //             setTimeout(() => {
-    //                 location.reload();
-    //             }, 3000); 
-    //         } else {
-    //             throw new Error(data.message || "Erro desconhecido no servidor.");
-    //         }
-    //     } catch (error) {
-    //         toastr.error("Erro: " + error.message);
-    //     } finally {
-    //         botaoEnviar.disabled = false;
-    //         botaoEnviar.innerHTML = 'Subir';
-    //     }
-    // }
-    
-    // para o caso onde o upload funcionou
     window.onload = () => {
         if (localStorage.getItem("uploadSuccess") === "true") {
             toastr.success("Arquivo enviado com sucesso!");
