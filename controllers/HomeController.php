@@ -1,6 +1,6 @@
 <?php
-require_once 'controllers/ArquivoController.php';
-require_once 'models/Arquivo.php';
+require_once 'controllers/ArquivoController.php'; 
+require_once 'models/ArquivoModel.php';
 
 class HomeController {
     private $arquivoController;

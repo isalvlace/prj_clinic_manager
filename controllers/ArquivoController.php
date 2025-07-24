@@ -1,5 +1,5 @@
 <?php
-require_once 'models/Arquivo.php';
+require_once 'models/ArquivoModel.php';
 
 class ArquivoController {
     private $arquivoModel;
@@ -14,66 +14,56 @@ class ArquivoController {
     }
 
     public function salvarArquivo() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['arquivo'])) {
-            return $this->responderErro("Requisição inválida ou nenhum arquivo enviado.");
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['arquivo']) || !isset($_SESSION['usuario_id'])) {
+            return $this->responderErro("Requisição inválida ou usuário não autenticado.");
         }
-    
-        if (!isset($_SESSION['usuario_id'])) {
-            return $this->responderErro("Usuário não autenticado.");
-        }
-    
-        $usuarioId = $_SESSION['usuario_id'];
+
         $arquivo = $_FILES['arquivo'];
-        $extensoesPermitidas = ['jpg', 'jpeg', 'png', 'pdf'];
-        $tamanhoMaximo = 2 * 1024 * 1024; // 2MB
-    
         $extensao = strtolower(pathinfo($arquivo["name"], PATHINFO_EXTENSION));
-    
-        if ($arquivo["size"] > $tamanhoMaximo) {
+        $extensoesPermitidas = ['jpg', 'jpeg', 'png', 'pdf', 'txt'];
+
+        if ($arquivo["size"] > 2 * 1024 * 1024) {
             return $this->responderErro("Arquivo muito grande (máx. 2MB).");
         }
-    
+
         if (!in_array($extensao, $extensoesPermitidas)) {
             return $this->responderErro("Tipo de arquivo não permitido.");
         }
-    
-        $info = pathinfo($arquivo["name"]);
-        $nomeArquivo = $info['filename'] . "_" . date("H_i_s") . "." . $extensao;
-    
-        $ftpHost = '127.0.0.1';
-        $ftpUser = 'ftpuser';
-        $ftpPass = 'lickitup';
-    
-        $ftpConn = ftp_connect($ftpHost);
-        if (!$ftpConn) {
-            return $this->responderErro("Erro de conexão com o servidor FTP.");
+
+        $nomeArquivo = pathinfo($arquivo["name"], PATHINFO_FILENAME) . "_" . date("H_i_s") . "." . $extensao;
+        $ftpPath = "/" . $nomeArquivo;
+
+        $ftp = ftp_connect('127.0.0.1');
+        if (!$ftp || !ftp_login($ftp, 'ftpuser', 'lickitup')) {
+            if ($ftp) ftp_close($ftp);
+            return $this->responderErro("Erro ao conectar ou autenticar no servidor FTP.");
         }
-    
-        if (!ftp_login($ftpConn, $ftpUser, $ftpPass)) {
-            ftp_close($ftpConn);
-            return $this->responderErro("Erro de autenticação no servidor FTP.");
-        }
-    
-        $diretorioUpload = '/files/';
-    
+
+        ftp_pasv($ftp, true);  // ativa modo passivo
+
         $this->arquivoModel->beginTransaction();
+
         try {
-            if (!$this->arquivoModel->salvarArquivo($usuarioId, $nomeArquivo, $diretorioUpload . $nomeArquivo)) {
-                throw new Exception("Erro ao salvar no banco de dados.");
+            if (!file_exists($arquivo["tmp_name"])) {
+                throw new Exception("Arquivo temporário não existe: " . $arquivo["tmp_name"]);
             }
-    
-            if (!ftp_put($ftpConn, $diretorioUpload . $nomeArquivo, $arquivo["tmp_name"], FTP_BINARY)) {
+
+            if (!ftp_put($ftp, $ftpPath, $arquivo["tmp_name"], FTP_BINARY)) {
                 throw new Exception("Erro ao enviar o arquivo para o servidor FTP.");
             }
-    
+
+            if (!$this->arquivoModel->salvarArquivo($_SESSION['usuario_id'], $nomeArquivo, $ftpPath)) {
+                throw new Exception("Erro ao salvar o arquivo no banco de dados.");
+            }
+
             $this->arquivoModel->commit();
-            ftp_close($ftpConn);
-    
+            ftp_close($ftp);
             return $this->responderSucesso("Arquivo salvo com sucesso!", ["file" => $nomeArquivo]);
-    
+
         } catch (Exception $e) {
             $this->arquivoModel->rollback();
-            ftp_close($ftpConn);
+            @ftp_delete($ftp, $ftpPath);
+            ftp_close($ftp);
             return $this->responderErro($e->getMessage());
         }
     }

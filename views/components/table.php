@@ -6,7 +6,7 @@
         <input type="file" id="file-upload" name="arquivo" class="file-input" />
         <div class="button-container">
             <button id="cancel-button" class="cancel-btn" type="button">Cancelar</button>
-            <button id="upload-button" class="upload-btn" type="button" disabled>Subir</button>
+            <button id="upload-button" class="upload-btn" type="submit" disabled>Subir</button>
         </div>
     </div>
 </form>
@@ -29,7 +29,7 @@
                 <?php foreach ($arquivos as $indice => $arquivo): ?>
                     <tr>
                         <td><?= $indice + 1 ?></td>
-                        <td><?= htmlspecialchars($arquivo['nome_arquivo']) ?></td>
+                        <td><?= htmlspecialchars($arquivo['nome']) ?></td>
                         <td><?= htmlspecialchars($arquivo['caminho']) ?></td>
                         <td><?= htmlspecialchars($arquivo['criado_em']) ?></td>
                     </tr>
