@@ -161,9 +161,75 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.removeItem("uploadSuccess");
         }
     };
-      
+
+    function pesquisarUsuario() {
+        document.addEventListener('click', function (e) {
+
+            if (e.target && e.target.id === 'btn-pesquisar') {
+                const inputNomeUsuario = document.getElementById('nome-usuario');
+                const resultadoUsuario = document.getElementById('resultado-pesquisa');
+                const btnVincular = document.getElementById('btn-vincular');
+                const campoUsuarioId = document.getElementById('usuario-id');
+
+                const nome = inputNomeUsuario.value.trim();
+
+                resultadoUsuario.innerHTML = '';
+                resultadoUsuario.classList.add('d-none');
+                btnVincular.disabled = true;
+                campoUsuarioId.value = '';
+
+                if (nome === '') {
+                    resultadoUsuario.innerHTML = '<div class="text-danger">Digite um nome.</div>';
+                    resultadoUsuario.classList.remove('d-none'); 
+                    return;
+                }
+
+                fetch(`/prj_clinic_manager/buscar-usuario-nome?nome=${encodeURIComponent(nome)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.nome) {
+                        resultadoUsuario.innerHTML = `<div class="alert alert-success">Usuário encontrado: <strong>${data.nome}</strong></div>`;
+                        resultadoUsuario.classList.remove('d-none'); 
+                        btnVincular.disabled = false;
+                        btnVincular.dataset.usuarioId = data.id;
+                        campoUsuarioId.value = data.id;
+                        inputNomeUsuario.value = data.nome;
+                    } else {
+                        resultadoUsuario.innerHTML = `<div class="alert alert-warning">Nenhum usuário encontrado com esse nome.</div>`;
+                        resultadoUsuario.classList.remove('d-none'); // mostra o resultado
+                        btnVincular.disabled = true;
+                        btnVincular.dataset.usuarioId = '';
+                        campoUsuarioId.value = '';
+                        inputNomeUsuario.value = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar usuário:', error);
+                    resultadoUsuario.innerHTML = `<div class="alert alert-danger">Erro ao buscar usuário.</div>`;
+                    resultadoUsuario.classList.remove('d-none'); // mostra o resultado
+                    btnVincular.disabled = true;
+                    campoUsuarioId.value = '';
+                });
+            }
+        });
+    }
+
+    function vincularArquivoModal() {
+        const vincularButtons = document.querySelectorAll('.btn-vincular');
+        const inputArquivoId = document.getElementById('arquivo-id');
+
+        vincularButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const idArquivo = this.getAttribute('data-id');
+                inputArquivoId.value = idArquivo;
+            });
+        });
+    }
+    
+    vincularArquivoModal();
     aplicarTemaInicial();
     inicializarAlternanciaTema();
     inicializarToggleSidebar();
     funcionalidadesCarregamento();
+    pesquisarUsuario();
 });

@@ -1,19 +1,23 @@
 <?php
 require_once 'models/ArquivoModel.php';
 
-class ArquivoController {
+class ArquivoController
+{
     private $arquivoModel;
 
-    public function __construct($pdo) {
+    public function __construct($pdo)
+    {
         $this->arquivoModel = new ArquivoModel($pdo);
     }
 
-    public function listarArquivos() {
+    public function listarArquivos()
+    {
         $arquivos = $this->arquivoModel->getArquivos();
-        require 'views/components/table.php'; 
+        require 'views/components/table.php';
     }
 
-    public function salvarArquivo() {
+    public function salvarArquivo()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_FILES['arquivo']) || !isset($_SESSION['usuario_id'])) {
             return $this->responderErro("Requisição inválida ou usuário não autenticado.");
         }
@@ -35,7 +39,8 @@ class ArquivoController {
 
         $ftp = ftp_connect('127.0.0.1');
         if (!$ftp || !ftp_login($ftp, 'ftpuser', 'lickitup')) {
-            if ($ftp) ftp_close($ftp);
+            if ($ftp)
+                ftp_close($ftp);
             return $this->responderErro("Erro ao conectar ou autenticar no servidor FTP.");
         }
 
@@ -67,16 +72,39 @@ class ArquivoController {
             return $this->responderErro($e->getMessage());
         }
     }
-    
-    private function responderErro($message) {
+
+    private function responderErro($message)
+    {
         header('Content-Type: application/json');
         echo json_encode(["status" => "error", "message" => $message]);
         exit();
     }
-    
-    private function responderSucesso($message, $data = []) {
+
+    private function responderSucesso($message, $data = [])
+    {
         header('Content-Type: application/json');
         echo json_encode(array_merge(["status" => "success", "message" => $message], $data));
         exit();
+    }
+
+    public function vincularArquivo()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $usuarioId = $_POST['usuario_id'] ?? null;
+            $arquivoId = $_POST['arquivo_id'] ?? null;
+
+            if (!$usuarioId || !$arquivoId) {
+                return $this->responderErro('ID do usuário ou ID do arquivo não fornecidos.');
+            }
+
+            $vinculo = $this->arquivoModel->vincularAoUsuario($usuarioId, $arquivoId);
+
+            if ($vinculo) {
+                header("Location: /prj_clinic_manager/sucesso");
+                exit;
+            } else {
+                return $this->responderErro('Falha ao vincular o arquivo.' . $vinculo);
+            }
+        }
     }
 }

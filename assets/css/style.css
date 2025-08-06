@@ -382,3 +382,9 @@ input:focus {
 .button-container button:hover {
     transform: scale(1.05);
 }
+
+#tabela-arquivos th,
+#tabela-arquivos td {
+    text-align: center;
+    vertical-align: middle;
+}

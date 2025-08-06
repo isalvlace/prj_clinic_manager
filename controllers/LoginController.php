@@ -5,7 +5,7 @@ class LoginController {
     private $usuario;
 
     public function __construct($pdo) {
-        $this->usuario = new Usuario($pdo);
+        $this->usuario = new UsuarioModel($pdo);
     }
 
     public function login() {

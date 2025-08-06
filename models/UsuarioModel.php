@@ -1,5 +1,5 @@
 <?php
-class Usuario
+class UsuarioModel
 {
     private $pdo;
 
@@ -15,7 +15,6 @@ class Usuario
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Verificar senha usando bcrypt
     public function verificarSenha($email, $senha)
     {
         $usuario = $this->buscarPorEmail($email);
@@ -24,5 +23,12 @@ class Usuario
             return $usuario;
         }
         return false;
+    }
+
+    public function buscarPorNome($nome)
+    {
+        $stmt = $this->pdo->prepare("SELECT id, nome FROM usuario WHERE nome LIKE :nome LIMIT 1");
+        $stmt->execute(['nome' => "%$nome%"]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
