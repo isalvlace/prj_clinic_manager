@@ -24,7 +24,7 @@ class HomeController {
         } else if (file_exists($pageFile) && $page == 'dashboard') {
             include_once $pageFile;
         } else {
-            echo "Página não encontrada!";
+            echo "Página Inicial!";
         }
 
         include_once __DIR__ . "/../views/components/footer.php";

@@ -11,7 +11,7 @@
                             <div class="col-6">
                                 <div class="p-3 m-1">
                                     <h4>Bem-vindo, <?= htmlspecialchars($_SESSION["usuario_nome"]) ?>!</h4>
-                                    <p>Seu nível de permissão é: <?= $_SESSION["permissao_id"] ?></p>
+                                    <p>Seu nível de permissão é: <?= $_SESSION["perfil"] ?></p>
                                 </div>
                             </div>
                         </div>  

@@ -1,22 +1,30 @@
 <?php
 
 class Database {
-    private $host = 'localhost'; 
-    private $db_name = 'clinic_manager_db'; 
-    private $username = 'root'; 
-    private $password = ''; 
+    private $host = 'db'; 
+    private $db_name = 'clinica'; 
+    private $username = 'user_admin'; 
+    private $password = 'password123'; 
     public $conn;
 
     public function getConnection() {
-        $this->conn = null;
+    $this->conn = null;
+    $attempts = 0;
+    $maxAttempts = 5;
 
+    while ($attempts < $maxAttempts) {
         try {
             $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db_name}", $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Ativa o modo de erro
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $this->conn; // Conectou! Sai do loop.
         } catch (PDOException $exception) {
-            echo "Erro de conexão: " . $exception->getMessage();
+            $attempts++;
+            if ($attempts >= $maxAttempts) {
+                echo "Erro de conexão após $maxAttempts tentativas: " . $exception->getMessage();
+                return null;
+            }
+            sleep(2);  
         }
-
-        return $this->conn;
     }
+}
 }

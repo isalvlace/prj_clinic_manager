@@ -13,20 +13,23 @@ class Router {
     }
 
     public function dispatch($requestUri, $requestMethod, $pdo) {
-        $basePath = '/prj_clinic_manager';
         $requestUri = parse_url($requestUri, PHP_URL_PATH);
-        $requestUri = str_replace($basePath, '', $requestUri);
 
         if ($requestUri === '/' || $requestUri === '') {
-            header("Location: {$basePath}/login");
+            header("Location: /login");
             exit();
         }
 
+        // Remover o prefixo antigo caso o navegador ainda tenha em cache
+        $requestUri = str_replace('/prj_clinic_manager', '', $requestUri);
+
+        // Rota fixa de Login 
         if ($requestUri === '/login' && $requestMethod === 'GET') {
             require_once __DIR__ . '/views/login.php';
             return;
         }
 
+        // Comparação de Rotas
         foreach ($this->routes as $route) {
             if ($route['url'] === $requestUri && $route['method'] === $requestMethod) {
                 $controller = new $route['controller']($pdo);
@@ -37,6 +40,6 @@ class Router {
         }
 
         http_response_code(404);
-        echo "Erro 404: Rota não encontrada!";
+        echo "Erro 404: Rota não encontrada! Caminho tentado: " . htmlspecialchars($requestUri);
     }
 }

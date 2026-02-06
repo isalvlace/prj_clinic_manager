@@ -9,10 +9,9 @@ class LoginController {
     }
 
     public function login() {
-        session_start();
     
         if (isset($_SESSION['usuario_id'])) {
-            header('Location: /prj_clinic_manager/home');
+            header('Location: /home');
             exit;
         }
     
@@ -21,13 +20,13 @@ class LoginController {
             $senha = $_POST['senha'] ?? '';
     
             $usuario = $this->usuario->verificarSenha($email, $senha);
-    
+
             if ($usuario) {
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['usuario_nome'] = $usuario['nome'];
-                $_SESSION['permissao_id'] = $usuario['permissao_id'];
+                $_SESSION['perfil'] = $usuario['perfil'];
     
-                header('Location: /prj_clinic_manager/home');
+                header('Location: /home');
                 exit;
             } else {
                 echo "E-mail ou senha incorretos!";

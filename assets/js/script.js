@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                fetch(`/prj_clinic_manager/buscar-usuario-nome?nome=${encodeURIComponent(nome)}`)
+                fetch(`/buscar-usuario-nome?nome=${encodeURIComponent(nome)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.nome) {
@@ -232,4 +232,14 @@ document.addEventListener("DOMContentLoaded", function () {
     inicializarToggleSidebar();
     funcionalidadesCarregamento();
     pesquisarUsuario();
+
+    // Limpa o parâmetro 'status' da URL para evitar que o alerta reapareça no F5
+    if (window.history.replaceState) {
+        const url = new URL(window.location);
+        if (url.searchParams.has('status')) {
+            url.searchParams.delete('status');
+            // Atualiza a URL no navegador sem recarregar a página
+            window.history.replaceState({}, document.title, url.pathname + url.search);
+        }
+    }
 });

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/prj_clinic_manager/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="/prj_clinic_manager/login" method="POST">
+        <form action="/login" method="POST">
             <div>
                 <label class="label-login-container" for="email">E-mail</label>
                 <input type="email" name="email" id="email" required>

@@ -7,7 +7,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                        <img src="/prj_clinic_manager/assets/img/user.png" class="avatar img-fluid rounded" alt="Usuário">
+                        <img src="/assets/img/user.png" class="avatar img-fluid rounded" alt="Usuário">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a href="#" class="dropdown-item">Perfil</a>

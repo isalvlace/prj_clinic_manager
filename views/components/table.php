@@ -1,4 +1,4 @@
-<form id="upload-form" action="/prj_clinic_manager/salvar-arquivo" method="POST" enctype="multipart/form-data">
+<form id="upload-form" action="/salvar-arquivo" method="POST" enctype="multipart/form-data">
     <div class="upload-container">
         <label for="file-upload" class="upload-box">
             <span id="upload-text">Clique ou arraste o arquivo</span>
@@ -11,6 +11,13 @@
     </div>
 </form>
 
+<?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Sucesso!</strong> O arquivo foi vinculado corretamente ao usuário.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
+
 <div class="card border-0">
     <div class="card-header">
         <h5 class="card-title">Exames</h5>
@@ -19,11 +26,14 @@
         <table id="tabela-arquivos" class="display">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
-                    <th>Caminho</th>
-                    <th>Data</th>
-                    <th></th>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome do Arquivo</th>
+                        <th>Paciente / Status</th> 
+                        <th>Caminho FTP</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
                 </tr>
             </thead>
             <tbody>
@@ -31,14 +41,29 @@
                     <tr>
                         <td><?= $indice + 1 ?></td>
                         <td><?= htmlspecialchars($arquivo['nome']) ?></td>
-                        <td><?= htmlspecialchars($arquivo['caminho']) ?></td>
-                        <td><?= htmlspecialchars($arquivo['criado_em']) ?></td>
                         <td>
-                            <button class="btn btn-primary btn-sm btn-vincular" data-bs-toggle="modal"
-                                data-bs-target="#modalVincular" data-id="<?= htmlspecialchars($arquivo['id']) ?>">
-                                Vincular
+                            <?php if (!empty($arquivo['nome_usuario'])): ?>
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    <?= htmlspecialchars($arquivo['nome_usuario']) ?>
+                                </span>
+                            <?php else: ?>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    Pendente
+                                </span>
+                            <?php endif; ?>
+                        </td> 
+                        <td><small class="text-muted"><?= htmlspecialchars($arquivo['caminho']) ?></small></td>
+                        <td><?= date('d/m/Y H:i', strtotime($arquivo['criado_em'])) ?></td>
+                        <td>
+                            <button class="btn <?= empty($arquivo['nome_usuario']) ? 'btn-primary' : 'btn-outline-secondary' ?> btn-sm btn-vincular" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalVincular" 
+                                    data-id="<?= htmlspecialchars($arquivo['id']) ?>">
+                                <?= empty($arquivo['nome_usuario']) ? 'Vincular' : 'Alterar Vínculo' ?>
                             </button>
-                        <td>
+                        </td> 
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -49,7 +74,7 @@
 <!-- Modal -->
 <div class="modal fade" id="modalVincular" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="/prj_clinic_manager/vincular-arquivo" method="POST" class="modal-content">
+        <form action="/vincular-arquivo" method="POST" class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalLabel">Vincular Arquivo a Usuário</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

@@ -1,10 +1,6 @@
 <?php
 class SairController {
     public function logout() {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
         // Remove todas as variáveis da sessão
         $_SESSION = [];
 
@@ -20,7 +16,7 @@ class SairController {
             );
         }
 
-        header("Location: index.php?page=login");
+        header("Location: /login");
         exit();
     }
 }

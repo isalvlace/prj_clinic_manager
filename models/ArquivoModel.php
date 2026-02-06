@@ -10,28 +10,33 @@ class ArquivoModel
 
     public function getArquivos()
     {
-        $query = "SELECT A.id, A.usuario_id, A.nome, A.caminho, A.criado_em, U.nome FROM arquivo A INNER JOIN usuario U ON A.usuario_id = U.id";
+        $query = "SELECT a.*, u.nome as nome_usuario FROM arquivos a
+            LEFT JOIN usuarios u ON a.usuario_id = u.id 
+            ORDER BY a.criado_em DESC";
+
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function salvarArquivo($usuarioId, $nome, $caminho)
+    public function salvarArquivo(?int $usuarioId, $nome, $caminho)
     {
-        $query = "INSERT INTO arquivo (usuario_id, nome, caminho, criado_em) 
-                  VALUES (:usuario_id, :nome_arquivo, :caminho, NOW())";
+        $query = "INSERT INTO arquivos (usuario_id, nome, caminho, criado_em) 
+                VALUES (:usuario_id, :nome_arquivo, :caminho, NOW())";
+        
         $stmt = $this->pdo->prepare($query);
+        
         return $stmt->execute([
-            ':usuario_id' => $usuarioId,
-            ':nome_arquivo' => $nome,
-            ':caminho' => $caminho,
+            ':usuario_id'    => $usuarioId, 
+            ':nome_arquivo'  => $nome,
+            ':caminho'       => $caminho,
         ]);
     }
 
     public function vincularAoUsuario($usuarioId, $arquivoId)
     {
         try {
-            $sql = "UPDATE arquivo SET usuario_id = :usuario_id WHERE id = :arquivo_id";
+            $sql = "UPDATE arquivos SET usuario_id = :usuario_id WHERE id = :arquivo_id";
             $stmt = $this->pdo->prepare($sql);
 
             $stmt->bindParam(':usuario_id', $usuarioId, PDO::PARAM_INT);

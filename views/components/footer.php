@@ -19,11 +19,11 @@
 </div> <!-- Fim do wrapper -->
 
 <!-- Scripts -->
-<script src="/prj_clinic_manager/assets/js/jquery-3.6.0.min.js"></script>
-<script src="/prj_clinic_manager/assets/js/jquery.dataTables.min.js"></script>
-<script src="/prj_clinic_manager/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/prj_clinic_manager/assets/js/script.js"></script>
-<script src="/prj_clinic_manager/assets/js/toastr.min.js"></script>
+<script src="/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/assets/js/jquery.dataTables.min.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/script.js"></script>
+<script src="/assets/js/toastr.min.js"></script>
 
 <script type="text/javascript">
     // DATATABLE

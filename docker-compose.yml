@@ -1,0 +1,59 @@
+services:
+  db:
+    image: mariadb:10.6
+    container_name: clinic_db
+    restart: always
+    environment:
+      MARIADB_DATABASE: clinica
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: user_admin
+      MARIADB_PASSWORD: password123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+    # Verifica se o banco está realmente pronto
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  ftp:
+    image: delfer/alpine-ftp-server
+    container_name: clinic_ftp
+    restart: always
+    environment:
+      - USERS=ftpuser|senha1234
+      - ADDRESS=ftp  # Para o modo passivo funcionar entre containers
+      - UID=33  # Alinha com o usuário www-data do PHP
+      - GID=33
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010" # Portas para o modo passivo
+    volumes:
+      - ftp_data:/ftp/ftpuser
+
+  app:
+    build: .
+    container_name: clinic_app
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+      ftp:
+        condition: service_started
+    volumes:
+      - .:/var/www/html # Reflete mudanças no código sem precisar de novo build
+    # Adicionando variáveis de ambiente caso queira usar no PHP depois
+    environment:
+      - DB_HOST=db
+      - DB_NAME=clinica
+      - DB_USER=user_admin
+      - DB_PASS=password123
+
+volumes:
+  db_data:
+  ftp_data:

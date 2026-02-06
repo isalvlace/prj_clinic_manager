@@ -1,5 +1,5 @@
 <?php
-require_once 'models/ArquivoModel.php';
+require_once __DIR__ . '/../models/ArquivoModel.php';
 
 class ArquivoController
 {
@@ -34,11 +34,11 @@ class ArquivoController
             return $this->responderErro("Tipo de arquivo não permitido.");
         }
 
-        $nomeArquivo = pathinfo($arquivo["name"], PATHINFO_FILENAME) . "_" . date("H_i_s") . "." . $extensao;
-        $ftpPath = "/" . $nomeArquivo;
+        $nomeArquivo = pathinfo($arquivo["name"], PATHINFO_FILENAME) . "_" . uniqid() . "." . $extensao;
+        $ftpPath = "./" . $nomeArquivo;
 
-        $ftp = ftp_connect('127.0.0.1');
-        if (!$ftp || !ftp_login($ftp, 'ftpuser', 'lickitup')) {
+        $ftp = ftp_connect('ftp');
+        if (!$ftp || !ftp_login($ftp, 'ftpuser', 'senha1234')) {
             if ($ftp)
                 ftp_close($ftp);
             return $this->responderErro("Erro ao conectar ou autenticar no servidor FTP.");
@@ -53,11 +53,11 @@ class ArquivoController
                 throw new Exception("Arquivo temporário não existe: " . $arquivo["tmp_name"]);
             }
 
-            if (!ftp_put($ftp, $ftpPath, $arquivo["tmp_name"], FTP_BINARY)) {
+            if (!@ftp_put($ftp, $ftpPath, $arquivo["tmp_name"], FTP_BINARY)) {
                 throw new Exception("Erro ao enviar o arquivo para o servidor FTP.");
             }
 
-            if (!$this->arquivoModel->salvarArquivo($_SESSION['usuario_id'], $nomeArquivo, $ftpPath)) {
+            if (!$this->arquivoModel->salvarArquivo(null, $nomeArquivo, $ftpPath)) {
                 throw new Exception("Erro ao salvar o arquivo no banco de dados.");
             }
 
@@ -100,7 +100,7 @@ class ArquivoController
             $vinculo = $this->arquivoModel->vincularAoUsuario($usuarioId, $arquivoId);
 
             if ($vinculo) {
-                header("Location: /prj_clinic_manager/sucesso");
+                header("Location: /home?page=table&status=success");
                 exit;
             } else {
                 return $this->responderErro('Falha ao vincular o arquivo.' . $vinculo);

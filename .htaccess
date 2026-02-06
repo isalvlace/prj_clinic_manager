@@ -1,4 +1,16 @@
 RewriteEngine On
+RewriteBase /
+
+# 1. Se o pedido for para a pasta assets, pare aqui e entregue o arquivo
+RewriteRule ^assets/ - [L]
+
+# 2. Se o arquivo ou pasta existir fisicamente, não use o index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 3. Mande todo o resto para o index.php
+RewriteRule ^ index.php [QSA,L]
+
+# 4. Garantir MIME types
+AddType text/css .css
+AddType application/javascript .js
